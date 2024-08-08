@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto; /* Allows horizontal scrolling if needed */
+        }
+        .circle {
+            width: 120px; /* Increased size */
+            height: 120px; /* Increased size */
+            border-radius: 50%;
+            background-color: #ccc;
+            margin: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 24px; /* Adjusted font size */
+            text-align: center;
+        }
+        .completed {
+            background-color: #4caf50;
+            color: white;
+        }
+        .folder {
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin: 10px 0;
+            cursor: pointer;
+            background-color: #f9f9f9;
+        }
+        .folder:hover {
+            background-color: #eee;
+        }
+        #taskContainer {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Task Tracker</h1>
+    <div>
+        <input type="text" id="folderName" placeholder="Enter folder name">
+        <button onclick="createFolder()">Create Folder</button>
+    </div>
+    <div id="foldersContainer"></div>
+    <div id="taskContainer">
+        <h2>Tasks</h2>
+        <input type="number" id="numQuestions" placeholder="Enter number of questions">
+        <button onclick="generateCircles()">Generate Circles</button>
+        <div id="circleContainer" class="container"></div>
+    </div>
+
+    <script>
+        let currentFolder = null;
+
+        function createFolder() {
+            const folderName = document.getElementById('folderName').value;
+            if (folderName.trim() === '') return;
+
+            const folderDiv = document.createElement('div');
+            folderDiv.className = 'folder';
+            folderDiv.textContent = folderName;
+            folderDiv.onclick = function() {
+                openFolder(folderName);
+            };
+
+            document.getElementById('foldersContainer').appendChild(folderDiv);
+            document.getElementById('folderName').value = '';
+        }
+
+        function openFolder(folderName) {
+            currentFolder = folderName;
+            document.getElementById('taskContainer').style.display = 'block';
+            document.getElementById('circleContainer').innerHTML = ''; // Clear existing circles
+        }
+
+        function generateCircles() {
+            if (!currentFolder) {
+                alert('Please select a folder first.');
+                return;
+            }
+
+            const container = document.getElementById('circleContainer');
+            container.innerHTML = ''; // Clear existing circles
+            const numQuestions = document.getElementById('numQuestions').value;
+
+            for (let i = 1; i <= numQuestions; i++) {
+                const circle = document.createElement('div');
+                circle.className = 'circle';
+                circle.textContent = i;
+                circle.onclick = function() {
+                    circle.classList.toggle('completed');
+                };
+                container.appendChild(circle);
+            }
+        }
+    </script>
+</body>
+</html>
